@@ -1,0 +1,78 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="justify-content-center">
+      <h2 class="text-center">Elenco posts</h2>
+      @if (session("deleted"))
+        <div class="alert alert-success d-block" role="alert">
+          {{session("deleted")}}
+        </div>
+      @endif
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Category</th>
+            <th scope="col">Tag</th>
+            <th scope="col">Content</th>
+            <th scope="col">Show</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($posts as $post)
+          <tr>
+            <th scope="row">{{$post->id}}</th>
+            <td>{{$post->title}}</td>
+            <td>
+              @if ($post->category)
+                {{$post->category->name}}
+              @else
+                -
+              @endif
+            </td>
+            <td>
+              @forelse ($post->tags as $tag)
+                <span class="badge bg-info">{{$tag->name}}</span>
+              @empty
+                -
+              @endforelse
+            </td>
+            <td>{{$post->content}}</td>
+            <td><a href="{{route("admin.posts.show", $post)}}" class="btn btn-primary">SHOW</a></td>
+            <td><a href="{{route("admin.posts.edit", $post)}}" class="btn btn-warning">EDIT</a></td>
+            <td>
+              <form onsubmit="return confirm('Vuoi davvero eliminare: {{$post->title}}')"
+              action="{{route('admin.posts.destroy', $post)}}"
+              method="POST">
+                @csrf
+                @method("DELETE")
+                <button type="submit" class="btn btn-danger">DELETE</button>
+              </form>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+      {{$posts->links()}}
+    </div>
+
+    <div class="mt-5">
+      @foreach ($categories as $category)
+        <h2>{{$category->name}}</h2>
+        <ul>
+          @foreach ($category->posts as $post_category)
+            <li><a href="{{route("admin.posts.show", $post_category)}}">{{$post_category->title}}</a></li>
+          @endforeach
+        </ul>
+      @endforeach   
+    </div>
+</div>
+@endsection
+
+@section("title")
+    | Elenco post
+@endsection
