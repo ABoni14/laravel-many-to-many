@@ -51,7 +51,7 @@ class PostController extends Controller
             [
                 "title.require" => "Il titolo è un campo obbligatorio",
                 "title.max" => "Il numero massimo è di :max caratteri",
-                "title.min" => "Il numero minimo è di :max caratteri",
+                "title.min" => "Il numero minimo è di :min caratteri",
                 "content.require" => "Il contenuto è un campo obbligatorio",
             ]
         );
